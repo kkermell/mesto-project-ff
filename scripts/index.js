@@ -11,14 +11,11 @@ function addCard(item) {
     .querySelector(".card__delete-button")
     .addEventListener("click", removeCard);
 
-  function removeCard() {
-    const cardItem = cardElement
-      .querySelector(".card__delete-button")
-      .closest(".card");
-    cardItem.remove();
-  };
-
   placesList.append(cardElement);
+}
+
+function removeCard() {
+  this.closest(".card").remove();
 }
 
 initialCards.forEach(addCard);
