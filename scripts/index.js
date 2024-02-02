@@ -1,4 +1,3 @@
-// @todo: Темплейт карточки
 const cardTemplate = document.querySelector("#card-template").content;
 const cardsContainer = document.querySelector(".places__list");
 
@@ -20,11 +19,3 @@ initialCards.forEach((cardData) => {
   const card = createCard(cardData);
   cardsContainer.append(card);
 });
-
-// @todo: DOM узлы
-
-// @todo: Функция создания карточки
-
-// @todo: Функция удаления карточки
-
-// @todo: Вывести карточки на страницу
