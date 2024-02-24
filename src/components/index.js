@@ -54,13 +54,6 @@ function handleEditFormSubmit(evt) {
   closeModal(openedPopup);
 }
 
-function resetFormValue() {
-  setTimeout(() => {
-    document.forms["edit-profile"].reset();
-    document.forms["new-place"].reset();
-  }, 600);
-}
-
 initialCards.forEach((cardData) => {
   const card = createCard(cardData, deleteCard, likeCard, openImage);
   cardsContainer.append(card);
@@ -75,11 +68,9 @@ addCardButton.addEventListener("click", () => {
 });
 profileEditPopupCloseButton.addEventListener("click", () => {
   closeModal(profileEditPopup);
-  resetFormValue();
 });
 addCardPopupCloseButton.addEventListener("click", () => {
   closeModal(addCardPopup);
-  resetFormValue();
 });
 
 popupImgCloseButton.addEventListener("click", () => {
@@ -97,5 +88,4 @@ formAddCard.addEventListener("submit", (evt) => {
   const card = createCard(cardData, deleteCard, likeCard, openImage);
   cardsContainer.prepend(card);
   closeModal(addCardPopup);
-  resetFormValue();
 });
