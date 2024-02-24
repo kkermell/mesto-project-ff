@@ -1,4 +1,4 @@
-import { openModal, closeModal } from "./modal";
+import { openModal } from "./modal";
 
 const cardTemplate = document.querySelector("#card-template").content;
 
@@ -20,7 +20,7 @@ function createCard(cardData, deleteCard, likeCard, openImage) {
     likeCard(likeButton);
   });
   cardImage.addEventListener("click", () => {
-    openImage(openModal, closeModal, cardData);
+    openImage(openModal, cardData);
   });
 
   return card;

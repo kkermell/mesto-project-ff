@@ -26,16 +26,15 @@ const jobInput = document.forms["edit-profile"].description;
 
 const popupImg = document.querySelector(".popup_type_image");
 const popupImgCloseButton = popupImg.querySelector(".popup__close");
+const popupImgImage = popupImg.querySelector(".popup__image");
+const popupImgCaption = popupImg.querySelector(".popup__caption");
 
 function insertProfileInfo() {
   nameInput.value = nameProfile.textContent;
   jobInput.value = jobProfile.textContent;
 }
 
-function openImage(openModal, closeModal, cardData) {
-  const popupImgImage = popupImg.querySelector(".popup__image");
-  const popupImgCaption = popupImg.querySelector(".popup__caption");
-
+function openImage(openModal, cardData) {
   popupImgImage.src = cardData.link;
   popupImgImage.alt = cardData.name;
   popupImgCaption.textContent = cardData.name;
@@ -43,15 +42,16 @@ function openImage(openModal, closeModal, cardData) {
 }
 
 function handleEditFormSubmit(evt) {
-  const nameProfile = document.querySelector(".profile__title");
-  const jobProfile = document.querySelector(".profile__description");
-  const openedPopup = document.querySelector(".popup_is-opened");
-
   evt.preventDefault();
 
   nameProfile.textContent = nameInput.value;
   jobProfile.textContent = jobInput.value;
-  closeModal(openedPopup);
+  closeModal(profileEditPopup);
+}
+
+function resetFormValue() {
+  document.forms["edit-profile"].reset();
+  document.forms["new-place"].reset();
 }
 
 initialCards.forEach((cardData) => {
@@ -65,9 +65,13 @@ profileEditButton.addEventListener("click", () => {
 });
 addCardButton.addEventListener("click", () => {
   openModal(addCardPopup);
+  resetFormValue();
 });
 profileEditPopupCloseButton.addEventListener("click", () => {
   closeModal(profileEditPopup);
+  setTimeout(() => {
+    resetFormValue();
+  }, 600);
 });
 addCardPopupCloseButton.addEventListener("click", () => {
   closeModal(addCardPopup);
@@ -88,4 +92,7 @@ formAddCard.addEventListener("submit", (evt) => {
   const card = createCard(cardData, deleteCard, likeCard, openImage);
   cardsContainer.prepend(card);
   closeModal(addCardPopup);
+  setTimeout(() => {
+    resetFormValue();
+  }, 600);
 });

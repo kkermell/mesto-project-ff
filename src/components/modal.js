@@ -8,7 +8,6 @@ function closeModal(popup) {
   popup.classList.remove("popup_is-opened");
   document.removeEventListener("keydown", closeHandleEsc);
   document.removeEventListener("click", closeHandleOverlay);
-  resetFormValue();
 }
 
 function closeHandleEsc(evt) {
@@ -19,17 +18,9 @@ function closeHandleEsc(evt) {
 }
 
 function closeHandleOverlay(evt) {
-  const openedPopup = document.querySelector(".popup_is-opened");
-  if (evt.target === openedPopup) {
-    closeModal(openedPopup);
+  if (evt.target.classList.contains("popup_is-opened")) {
+    closeModal(evt.target);
   }
-}
-
-function resetFormValue() {
-  setTimeout(() => {
-    document.forms["edit-profile"].reset();
-    document.forms["new-place"].reset();
-  }, 600);
 }
 
 export { openModal, closeModal };
