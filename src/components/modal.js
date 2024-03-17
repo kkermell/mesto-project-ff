@@ -23,4 +23,13 @@ function closeHandleOverlay(evt) {
   }
 }
 
-export { openModal, closeModal };
+function renderLoading(isLoading, popup) {
+  const buttonElement = popup.querySelector(".popup__button");
+  if (isLoading) {
+    buttonElement.textContent = "Сохранение...";
+  } else {
+    buttonElement.textContent = "Сохранить";
+  }
+}
+
+export { openModal, closeModal, renderLoading };

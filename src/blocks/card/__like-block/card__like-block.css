@@ -1,0 +1,26 @@
+.card__like-block {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* likes
+: 
+Array(1)
+0
+: 
+about
+: 
+"Им дам и вам дам"
+avatar
+: 
+"https://pictures.s3.yandex.net/frontend-developer/common/ava.jpg"
+cohort
+: 
+"wff-cohort-8"
+name
+: 
+"Жан Вам Дам"
+_id
+: 
+"ff1bd5eccebab35cd1becd38" */
