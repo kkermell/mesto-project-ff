@@ -1,5 +1,10 @@
 import { createCard, deleteCard, likeCard } from "./card";
-import { openModal, closeModal, renderLoading } from "./modal";
+import {
+  openModal,
+  closeModal,
+  renderLoading,
+  closeHandleOverlay,
+} from "./modal";
 import { enableValidation, clearValidation } from "./validation";
 import {
   loadingCardsData,
@@ -53,12 +58,14 @@ const validationConfig = {
   errorClass: "popup__input_type-error-active",
 };
 
+let userId;
+
 function insertProfileInfo() {
   nameInput.value = nameProfile.textContent;
   jobInput.value = jobProfile.textContent;
 }
 
-function openImage(openModal, cardData) {
+function openImage(cardData) {
   popupImgImage.src = cardData.link;
   popupImgImage.alt = cardData.name;
   popupImgCaption.textContent = cardData.name;
@@ -69,13 +76,14 @@ function handleEditFormSubmit(evt) {
   evt.preventDefault();
   renderLoading(true, profileEditPopup);
   submitUserData(nameInput, jobInput)
-    .then(() => {
-      nameProfile.textContent = nameInput.value;
-      jobProfile.textContent = jobInput.value;
-    })
-    .finally(() => {
+    .then((data) => {
+      nameProfile.textContent = data.name;
+      jobProfile.textContent = data.about;
       closeModal(profileEditPopup);
       renderLoading(false, profileEditPopup);
+    })
+    .catch((err) => {
+      console.log(err);
     });
 }
 
@@ -88,12 +96,20 @@ function handleAddCardFormSubmit(evt) {
   };
   submitNewCard(cardData)
     .then((data) => {
-      const card = createCard(data, deleteCard, likeCard, openImage);
+      const card = createCard(
+        data,
+        deleteCard,
+        likeCard,
+        openImage,
+        openModal,
+        userId
+      );
       cardsContainer.prepend(card);
-    })
-    .finally(() => {
       closeModal(addCardPopup);
       renderLoading(false, addCardPopup);
+    })
+    .catch((err) => {
+      console.log(err);
     });
 }
 
@@ -103,39 +119,36 @@ function handleEditAvatarSubmit(evt) {
   handleEditAvatar(profileImageInput)
     .then((userData) => {
       profileImage.style["background-image"] = `url('${userData.avatar}')`;
-    })
-    .finally(() => {
       closeModal(profileImagePopup);
       renderLoading(false, profileImagePopup);
+    })
+    .catch((err) => {
+      console.log(err);
     });
 }
 
-function resetFormValue() {
-  document.forms["edit-profile"].reset();
-  document.forms["new-place"].reset();
-  document.forms["edit-avatar"].reset();
+function resetFormValue(form) {
+  form.reset();
 }
 
 profileEditButton.addEventListener("click", () => {
+  resetFormValue(formProfileEdit);
   insertProfileInfo();
   clearValidation(profileEditPopup, validationConfig);
   openModal(profileEditPopup);
 });
 profileImage.addEventListener("click", () => {
-  resetFormValue();
+  resetFormValue(formProfileImageEdit);
   clearValidation(profileImagePopup, validationConfig);
   openModal(profileImagePopup);
 });
 addCardButton.addEventListener("click", () => {
-  resetFormValue();
+  resetFormValue(formAddCard);
   clearValidation(addCardPopup, validationConfig);
   openModal(addCardPopup);
 });
 profileEditPopupCloseButton.addEventListener("click", () => {
   closeModal(profileEditPopup);
-  setTimeout(() => {
-    resetFormValue();
-  }, 600);
 });
 profileImagePopupCloseButton.addEventListener("click", () => {
   closeModal(profileImagePopup);
@@ -148,6 +161,14 @@ popupImgCloseButton.addEventListener("click", () => {
   closeModal(popupImg);
 });
 
+profileEditPopup.addEventListener("click", closeHandleOverlay);
+
+profileImagePopup.addEventListener("click", closeHandleOverlay);
+
+addCardPopup.addEventListener("click", closeHandleOverlay);
+
+popupImg.addEventListener("click", closeHandleOverlay);
+
 formProfileEdit.addEventListener("submit", handleEditFormSubmit);
 
 formProfileImageEdit.addEventListener("submit", handleEditAvatarSubmit);
@@ -159,10 +180,20 @@ enableValidation(validationConfig);
 Promise.all([loadingCardsData(), loadingUserData()]).then(
   ([cardsData, userData]) => {
     cardsData.forEach((card) => {
-      cardsContainer.append(createCard(card, deleteCard, likeCard, openImage));
+      cardsContainer.append(
+        createCard(
+          card,
+          deleteCard,
+          likeCard,
+          openImage,
+          openModal,
+          userData._id
+        )
+      );
     });
     nameProfile.textContent = userData.name;
     jobProfile.textContent = userData.about;
     profileImage.style["background-image"] = `url('${userData.avatar}')`;
+    userId = userData._id;
   }
 );

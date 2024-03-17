@@ -1,13 +1,11 @@
 const openModal = function (popup) {
   popup.classList.add("popup_is-opened");
   document.addEventListener("keydown", closeHandleEsc);
-  document.addEventListener("click", closeHandleOverlay);
 };
 
 function closeModal(popup) {
   popup.classList.remove("popup_is-opened");
   document.removeEventListener("keydown", closeHandleEsc);
-  document.removeEventListener("click", closeHandleOverlay);
 }
 
 function closeHandleEsc(evt) {
@@ -32,4 +30,4 @@ function renderLoading(isLoading, popup) {
   }
 }
 
-export { openModal, closeModal, renderLoading };
+export { openModal, closeModal, renderLoading, closeHandleOverlay };

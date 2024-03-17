@@ -57,9 +57,6 @@ function enableValidation(validationConfig) {
   );
 
   formList.forEach((formElement) => {
-    formElement.addEventListener("submit", (evt) => {
-      evt.preventDefault();
-    });
     setEventListeners(formElement, validationConfig);
   });
 }
@@ -90,10 +87,9 @@ function clearValidation(profileForm, validationConfig) {
   );
 
   inputList.forEach((inputElement) => {
-    checkInputValidity(formElement, inputElement, validationConfig);
     hideInputError(formElement, inputElement, validationConfig);
-    toggleButtonState(inputList, buttonElement, validationConfig);
   });
+  toggleButtonState(inputList, buttonElement, validationConfig);
 }
 
 export { enableValidation, clearValidation };
