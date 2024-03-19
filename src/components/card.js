@@ -7,7 +7,14 @@ import {
 
 const cardTemplate = document.querySelector("#card-template").content;
 
-function createCard(cardData, deleteCard, likeCard, openImage, openModal, userId) {
+function createCard(
+  cardData,
+  deleteCard,
+  likeCard,
+  openImage,
+  openModal,
+  userId
+) {
   const card = cardTemplate.querySelector(".card").cloneNode(true);
   const deleteButton = card.querySelector(".card__delete-button");
   const cardImage = card.querySelector(".card__image");
@@ -35,6 +42,7 @@ function createCard(cardData, deleteCard, likeCard, openImage, openModal, userId
   likeButton.addEventListener("click", () => {
     likeCard(likeButton, cardData, cardLikeAmount, userId);
   });
+
   cardImage.addEventListener("click", () => {
     openImage(cardData);
   });

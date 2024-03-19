@@ -58,6 +58,8 @@ const validationConfig = {
   errorClass: "popup__input_type-error-active",
 };
 
+const buttonsList = document.querySelectorAll(".popup__close");
+
 let userId;
 
 function insertProfileInfo() {
@@ -80,10 +82,12 @@ function handleEditFormSubmit(evt) {
       nameProfile.textContent = data.name;
       jobProfile.textContent = data.about;
       closeModal(profileEditPopup);
-      renderLoading(false, profileEditPopup);
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      renderLoading(false, profileEditPopup);
     });
 }
 
@@ -106,10 +110,12 @@ function handleAddCardFormSubmit(evt) {
       );
       cardsContainer.prepend(card);
       closeModal(addCardPopup);
-      renderLoading(false, addCardPopup);
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      renderLoading(false, addCardPopup);
     });
 }
 
@@ -120,54 +126,41 @@ function handleEditAvatarSubmit(evt) {
     .then((userData) => {
       profileImage.style["background-image"] = `url('${userData.avatar}')`;
       closeModal(profileImagePopup);
-      renderLoading(false, profileImagePopup);
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      renderLoading(false, profileImagePopup);
     });
 }
 
-function resetFormValue(form) {
-  form.reset();
-}
-
 profileEditButton.addEventListener("click", () => {
-  resetFormValue(formProfileEdit);
+  formProfileEdit.reset();
   insertProfileInfo();
   clearValidation(profileEditPopup, validationConfig);
   openModal(profileEditPopup);
 });
+
 profileImage.addEventListener("click", () => {
-  resetFormValue(formProfileImageEdit);
+  formProfileImageEdit.reset();
   clearValidation(profileImagePopup, validationConfig);
   openModal(profileImagePopup);
 });
+
 addCardButton.addEventListener("click", () => {
-  resetFormValue(formAddCard);
+  formAddCard.reset();
   clearValidation(addCardPopup, validationConfig);
   openModal(addCardPopup);
 });
-profileEditPopupCloseButton.addEventListener("click", () => {
-  closeModal(profileEditPopup);
+
+buttonsList.forEach((btn) => {
+  const popup = btn.closest(".popup");
+  btn.addEventListener("click", () => {
+    closeModal(popup);
+  });
+  popup.addEventListener("mousedown", closeHandleOverlay);
 });
-profileImagePopupCloseButton.addEventListener("click", () => {
-  closeModal(profileImagePopup);
-});
-addCardPopupCloseButton.addEventListener("click", () => {
-  closeModal(addCardPopup);
-});
-
-popupImgCloseButton.addEventListener("click", () => {
-  closeModal(popupImg);
-});
-
-profileEditPopup.addEventListener("click", closeHandleOverlay);
-
-profileImagePopup.addEventListener("click", closeHandleOverlay);
-
-addCardPopup.addEventListener("click", closeHandleOverlay);
-
-popupImg.addEventListener("click", closeHandleOverlay);
 
 formProfileEdit.addEventListener("submit", handleEditFormSubmit);
 
